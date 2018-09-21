@@ -29,8 +29,8 @@ void motors_callback(const rbpi3_motor_controller::motors_signal::ConstPtr& moto
         digitalWrite (RIGHT_FORWARD, HIGH) ;
     }else if(motors_signal->motor_right == -1)
     {
-        digitalWrite (RIGHT_BACKWARD, LOW) ;
-        digitalWrite (RIGHT_FORWARD, HIGH) ;   
+        digitalWrite (RIGHT_FORWARD, LOW) ;
+        digitalWrite (RIGHT_BACKWARD, HIGH) ;   
     }
 
     if(motors_signal->motor_right == 0 and motors_signal->motor_left == 0)
