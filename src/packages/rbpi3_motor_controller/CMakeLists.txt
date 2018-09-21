@@ -86,7 +86,7 @@ target_link_libraries(${PROJECT_NAME}_subscriber_node ${catkin_LIBRARIES} ${WIRI
 ## catkin creates several files which are used as flags to determine if something has been built or not. 
 ## The flags for messages generatedd are always following the same naming convention: "<package_name>_generate_messages_cpp"
 ## Therefore This will generate message header file before building the target (outout -o)
-add_dependencies(${PROJECT_NAME}_subscriber_node ${PROJECT_NAME}_generate_messages_cpp wiringPi)
+add_dependencies(${PROJECT_NAME}_subscriber_node ${PROJECT_NAME}_generate_messages_cpp)
 
 
 
