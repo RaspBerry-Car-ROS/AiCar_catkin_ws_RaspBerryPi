@@ -37,6 +37,8 @@ void motors_callback(const rbpi3_motor_controller::motors_signal::ConstPtr& moto
     {
         digitalWrite (LEFT_FORWARD, LOW) ;
         digitalWrite (LEFT_BACKWARD, LOW) ;
+        digitalWrite (RIGHT_BACKWARD, LOW) ;
+        digitalWrite (RIGHT_FORWARD, LOW) ;
     }
     
     ROS_INFO("motor left :%i  motor right: %i",motors_signal->motor_left,motors_signal->motor_right);
