@@ -14,6 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+## wiringPi library
+find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
+find_path(WIRINGPI_INCLUDE_DIRS NAMES wiringPi.h)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -72,17 +75,18 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${WIRINGPI_INCLUDE_DIRS} #wiringPi headers directory
 )
 
 ## This will create executables of the nodes
 add_executable(${PROJECT_NAME}_subscriber_node src/motors_subscriber.cpp)
 ## This will link executables to their corresponding libraries
-target_link_libraries(${PROJECT_NAME}_subscriber_node ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_subscriber_node ${catkin_LIBRARIES} ${WIRINGPI_LIBRARIES})
 
 ## catkin creates several files which are used as flags to determine if something has been built or not. 
 ## The flags for messages generatedd are always following the same naming convention: "<package_name>_generate_messages_cpp"
 ## Therefore This will generate message header file before building the target (outout -o)
-add_dependencies(${PROJECT_NAME}_subscriber_node ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_subscriber_node ${PROJECT_NAME}_generate_messages_cpp wiringPi)
 
 
 
