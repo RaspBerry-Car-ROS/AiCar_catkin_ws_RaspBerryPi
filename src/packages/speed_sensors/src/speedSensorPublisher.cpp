@@ -1,6 +1,6 @@
 #include "ros/ros.h"
 #include "wiringPi.h"
-#include "speed_sensor/speed_sensors_msg.h"
+#include "speed_sensors/speed_sensors_msg.h"
 // Defining Pins
 #define INTERRUPT_PIN_R 3
 #define INTERRUPT_PIN_L 7
@@ -46,14 +46,14 @@ main(int argc, char **argv)
 
     //Created a publisher object
 	ros::Publisher speed_sensors_publisher =  
-                        node_obj.advertise<speed_sensor::speed_sensors_msg>("/speed_sensors_topic",10);// The 10 is the buffer size \
+                        node_obj.advertise<speed_sensors::speed_sensors_msg>("/speed_sensors_topic",10);// The 10 is the buffer size \
                                                                              (number of msgs accumulated before sending)
 
     while ( ros::ok()) {
         
 
         //Created a speed_sensors_msg message object
-		speed_sensor::speed_sensors_msg sensors_msg;
+		speed_sensors::speed_sensors_msg sensors_msg;
         
         //Inserted data to message variables
         sensors_msg.left_wheel_distance=distance_L;
