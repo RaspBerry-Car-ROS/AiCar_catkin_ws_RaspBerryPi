@@ -48,6 +48,10 @@ main(int argc, char **argv)
 	ros::Publisher speed_sensors_publisher =  
                         node_obj.advertise<speed_sensors::speed_sensors_msg>("/speed_sensors_topic",10);// The 10 is the buffer size \
                                                                              (number of msgs accumulated before sending)
+    // create a rate object to set frequency in hz
+    ros::Rate frequency_loop(400);//this is the frequency to which the project will work that is 2.5ms reaction\
+                                    in this way we light the load for the processor 
+                                
 
     while ( ros::ok()) {
         
@@ -68,6 +72,10 @@ main(int argc, char **argv)
 
         //Spinning once for doing the  all operation once (not really necessary for publishers)
 		ros::spinOnce();
+
+        // frequency loop sleeping the necessary time for meeting the frequency stated before 
+        // it sleeps the time remaining to meet the frequency after executing all the above code lines 
+        frequency_loop.sleep();
     }
 
     return 0;
