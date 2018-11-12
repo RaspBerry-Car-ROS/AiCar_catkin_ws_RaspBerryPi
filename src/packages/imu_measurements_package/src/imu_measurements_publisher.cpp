@@ -1,6 +1,7 @@
 #include "ros/ros.h"
 #include "wiringPi.h"
 #include <wiringPiI2C.h>
+#include "imu_measurements_package/imu_message.h"
 
 #define MPU6050_ADDRESS 0x68
 #define ACCEL_X_1 0x3B
@@ -49,12 +50,18 @@ main(int argc, char **argv)
     wiringPiSetup ();
     MPU_ID=wiringPiI2CSetup (MPU6050_ADDRESS) ; /*Use i2cdetect command to find your respective device address*/
     COMPASS_ID=wiringPiI2CSetup(HMC5883L_ADDRESS);
-    //Initializing ROS node with the name of speed_sensors_publisher
+    
+    //Initializing ROS node with the name of imu_sensors_publisher
 	ros::init(argc, argv,"imu_sensor_publisher");
     //Created a node handle object
 	ros::NodeHandle node_obj;
+
+    //Created a publisher object
+	ros::Publisher imu_sensors_publisher =  
+                        node_obj.advertise<imu_measurements_package::imu_message>("/imu_sensors_topic",10);// The 10 is the buffer size \
+                                                                             (number of msgs accumulated before sending)
     // create a rate object to set frequency in hz
-    ros::Rate frequency_loop(10);//this is the frequency to which the project will work that is 2.5ms reaction\
+    ros::Rate frequency_loop(400);//this is the frequency to which the project will work that is 2.5ms reaction\
                                     in this way we light the load for the processor 
     if(MPU_ID==-1 or COMPASS_ID==-1){
         ROS_INFO("Can't setup the I2C device");
@@ -79,6 +86,9 @@ main(int argc, char **argv)
         wiringPiI2CWriteReg8(MPU_ID,MPU_SLAVE_0_ENABLE_LEN_TRANSFER,6|0x80); //6 bytes transferred and enable slave 0
         wiringPiI2CWriteReg8(MPU_ID,MPU_SLAVE_TIMING_DATA,1);//enables slave 0 delay, to read at the same time as the MPU's accelerometer and gyrpscope
         
+        //Created a imu_measurements message object
+		imu_measurements_package::imu_message imu_msg;
+
         while ( ros::ok()){
 
             //getting the x accelerometer measurements in gForce units
@@ -112,6 +122,20 @@ main(int argc, char **argv)
             compass_z=wiringPiI2CReadReg8(MPU_ID,SLAVE_0_COMPASS_Z1)<< 8|wiringPiI2CReadReg8(MPU_ID,SLAVE_0_COMPASS_Z2);
             magn_z = compass_z/660.0; 
             ROS_INFO("magnetomer in gauss x: %f, in y: %f, in z: %f",magn_x,magn_y,magn_z);
+
+            //Inserted data to message variables
+            imu_msg.acceleration_x_gF=gForceX;
+            imu_msg.acceleration_y_gF=gForceY;
+            imu_msg.acceleration_z_gF=gForceZ;
+            imu_msg.rotation_x_degSec=rotationX;
+            imu_msg.rotation_y_degSec=rotationY;
+            imu_msg.rotation_z_degSec=rotationZ;
+            imu_msg.compass_x_gauss=magn_x;
+            imu_msg.compass_y_gauss=magn_y;
+            imu_msg.compass_z_gauss=magn_z;
+
+            //Publishing the topic 
+		    imu_sensors_publisher.publish(imu_msg);
 
             // frequency loop sleeping the necessary time for meeting the frequency stated before 
             // it sleeps the time remaining to meet the frequency after executing all the above code lines 
