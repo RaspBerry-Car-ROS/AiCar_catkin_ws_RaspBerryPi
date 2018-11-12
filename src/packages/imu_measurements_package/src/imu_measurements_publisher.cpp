@@ -1,7 +1,7 @@
 #include "ros/ros.h"
 #include "wiringPi.h"
 #include <wiringPiI2C.h>
-#include "imu_measurements_package/imu_message.h"
+#include "imu_measurements_package/Imu_message.h"
 
 #define MPU6050_ADDRESS 0x68
 #define ACCEL_X_1 0x3B
@@ -58,7 +58,7 @@ main(int argc, char **argv)
 
     //Created a publisher object
 	ros::Publisher imu_sensors_publisher =  
-                        node_obj.advertise<imu_measurements_package::imu_message>("/imu_sensors_topic",10);// The 10 is the buffer size \
+                        node_obj.advertise<imu_measurements_package::Imu_message>("/imu_sensors_topic",10);// The 10 is the buffer size \
                                                                              (number of msgs accumulated before sending)
     // create a rate object to set frequency in hz
     ros::Rate frequency_loop(400);//this is the frequency to which the project will work that is 2.5ms reaction\
@@ -87,7 +87,7 @@ main(int argc, char **argv)
         wiringPiI2CWriteReg8(MPU_ID,MPU_SLAVE_TIMING_DATA,1);//enables slave 0 delay, to read at the same time as the MPU's accelerometer and gyrpscope
         
         //Created a imu_measurements message object
-		imu_measurements_package::imu_message imu_msg;
+		imu_measurements_package::Imu_message imu_msg;
 
         while ( ros::ok()){
 
