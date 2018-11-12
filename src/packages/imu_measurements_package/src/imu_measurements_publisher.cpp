@@ -121,7 +121,7 @@ main(int argc, char **argv)
             //getting the x magnetomer measurements in gauss units
             compass_z=wiringPiI2CReadReg8(MPU_ID,SLAVE_0_COMPASS_Z1)<< 8|wiringPiI2CReadReg8(MPU_ID,SLAVE_0_COMPASS_Z2);
             magn_z = compass_z/660.0; 
-            ROS_INFO("magnetomer in gauss x: %f, in y: %f, in z: %f",magn_x,magn_y,magn_z);
+            //ROS_INFO("magnetomer in gauss x: %f, in y: %f, in z: %f",magn_x,magn_y,magn_z);
 
             //Inserted data to message variables
             imu_msg.acceleration_x_gF=gForceX;
