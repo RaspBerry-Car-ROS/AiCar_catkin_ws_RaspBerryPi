@@ -79,7 +79,7 @@ include_directories(
 )
 
 ## This will create executables of the nodes
-add_executable(${PROJECT_NAME}_publisher_node src/imu_publisher.cpp)
+add_executable(${PROJECT_NAME}_publisher_node src/imu_measurements_publisher.cpp)
 ## This will link executables to their corresponding libraries
 target_link_libraries(${PROJECT_NAME}_publisher_node ${catkin_LIBRARIES} ${WIRINGPI_LIBRARIES})
 
